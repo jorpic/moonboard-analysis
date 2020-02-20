@@ -1,0 +1,26 @@
+{
+  "name": "luna",
+  "version": "1.0.0",
+  "description": "Moonboard problems analysys",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorpic/luna.git"
+  },
+  "author": "Max Taldykin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jorpic/luna/issues"
+  },
+  "homepage": "https://github.com/jorpic/luna#readme",
+  "dependencies": {
+    "bulma": "^0.8.0",
+    "preact": "^10.3.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}
