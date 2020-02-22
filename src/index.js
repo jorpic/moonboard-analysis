@@ -5,23 +5,25 @@ import board_2017 from "../images/2017.png";
 class Board extends Component {
   constructor() {
     super();
-    this.imgRef = createRef();
     this.cnvRef = createRef();
   }
 
   componentDidMount() {
-    const img = this.imgRef.current;
     const cnv = this.cnvRef.current;
-    cnv.style.position = "absolute";
-    cnv.style.left = img.offsetLeft + "px";
-    cnv.style.top = img.offsetTop + "px";
     this.ctx = cnv.getContext("2d");
-    this.componenetDidUpdate();
+    const img = new Image(0, 0);
+    const board = this;
+    img.onload = function() {
+      cnv.width = this.naturalWidth;
+      cnv.height = this.naturalHeight;
+      board.ctx.drawImage(this, 0, 0);
+      board.componentDidUpdate();
+    }
+    img.src = board_2017;
   }
 
-  componenetDidUpdate() {
+  componentDidUpdate() {
     const cnv = this.cnvRef.current;
-    this.ctx.clearRect(0, 0, cnv.width, cnv.height);
     const m = this.props.moves;
 
     let color = "#0f0";
@@ -44,8 +46,8 @@ class Board extends Component {
     this.ctx.strokeStyle = color;
     this.ctx.beginPath();
     this.ctx.arc(
-      80 + i*43 ,
-      75 + j*43,
+      95 + i*50 ,
+      85 + j*50,
       20, 0, 2 * Math.PI, false);
     this.ctx.stroke();
   }
@@ -53,10 +55,7 @@ class Board extends Component {
 
   render() {
     return (
-      <div class="board">
-        <img ref={this.imgRef} src={board_2017} width="650" height="1000"/>
-        <canvas ref={this.cnvRef} width="650" height="1000"/>
-      </div>);
+      <canvas ref={this.cnvRef}/>);
   }
 }
 
