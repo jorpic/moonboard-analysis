@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
     <style>
+      .histogram .bar .empty {
+        fill: #0000;
+      }
+      .histogram .bar .value {
+        fill: #ffaaaa;
+      }
+      .histogram .bar.selected .empty {
+        fill: #fefefe;
+      }
+      .histogram .bar.selected .value {
+        fill: #eaaaea;
+      }
+      .histogram .bar:hover .empty {
+        fill: #fefefeaa;
+      }
+      .histogram .bar:hover .value {
+        fill: #ffaaaaaa;
+      }
+      .histogram .bar.selected:hover .value {
+        fill: #eaaaeaaa;
+      }
     </style>
   </head>
   <body>

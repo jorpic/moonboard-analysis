@@ -1,4 +1,5 @@
 import { h, render, Component, createRef } from "preact";
+import Histogram from "./Histogram";
 import board_2017 from "../images/2017.png";
 
 
@@ -64,21 +65,48 @@ class App extends Component {
   constructor() {
     super();
     this.setState({
-      problems: null
+      problems: null,
+      gradesFilter: {},
     });
 
     const problemsUrl = require("../data/problems.json");
     fetch(problemsUrl)
       .then(res => res.json())
       .then(problems => this.setState({problems}));
+
+    // FIXME: configure parcel to accept class properties.
+    this.onGradeFilter = this.onGradeFilter.bind(this);
   }
 
+  onGradeFilter(label) {
+    const {gradesFilter} = this.state;
+    console.log(gradesFilter);
+    this.setState({gradesFilter:
+      Object.assign({}, gradesFilter, {[label]: !gradesFilter[label]})
+    });
+  };
+
   render() {
+    const {problems, gradesFilter} = this.state;
+    if (!problems) return "Loading...";
+
     const i = 12;
-    const {problems} = this.state;
-    return problems && (
+    const grades = problems.reduce((m, p) => {
+      m[p.Grade] || (m[p.Grade] = 0);
+      m[p.Grade] += 1;
+      return m;
+    }, {});
+
+    return (
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
+          <Histogram
+            width={600}
+            height={300}
+            data={grades}
+            selected={gradesFilter}
+            onSelect={this.onGradeFilter}
+          />
           {problems[i].Name}
           <Board moves={problems[i].Moves}/>
         </div>
