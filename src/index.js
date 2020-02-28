@@ -66,45 +66,48 @@ class App extends Component {
     super();
     this.setState({
       problems: null,
-      gradesFilter: {},
+      histograms: null,
+      filters: {},
     });
 
     const problemsUrl = require("../data/problems.json");
     fetch(problemsUrl)
       .then(res => res.json())
-      .then(problems => this.setState({problems}));
+      .then(problems => this.setState({
+        problems,
+        histograms: {
+          Grade: mkHistogram(problems, "Grade")
+        }
+      }));
 
     // FIXME: configure parcel to accept class properties.
     this.onGradeFilter = this.onGradeFilter.bind(this);
   }
 
-  onGradeFilter(label) {
-    const {gradesFilter} = this.state;
-    console.log(gradesFilter);
-    this.setState({gradesFilter:
-      Object.assign({}, gradesFilter, {[label]: !gradesFilter[label]})
+  onFilter(name, label) {
+    const {filters} = this.state;
+    const filter = filters[name] || {};
+    this.setState({
+      filters:
+        {...filters, [name]: {...filter, [label]: !filter[label]}}
     });
-  };
+  }
+
+  onGradeFilter(label) { this.onFilter("Grade", label) }
 
   render() {
-    const {problems, gradesFilter} = this.state;
+    const {problems, histograms, filters} = this.state;
     if (!problems) return "Loading...";
 
     const i = 12;
-    const grades = problems.reduce((m, p) => {
-      m[p.Grade] || (m[p.Grade] = 0);
-      m[p.Grade] += 1;
-      return m;
-    }, {});
-
     return (
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
           <Histogram
             width={600}
             height={300}
-            data={grades}
-            selected={gradesFilter}
+            data={histograms.Grade}
+            selected={filters.Grade}
             onSelect={this.onGradeFilter}
           />
           {problems[i].Name}
@@ -114,5 +117,15 @@ class App extends Component {
   }
 }
 
+
+function mkHistogram(list, key) {
+  return list.reduce(
+    (ix, p) => {
+      const count = ix[p[key]] || 0;
+      ix[p[key]] = count + 1;
+      return ix;
+    },
+    {});
+}
 
 render(<App />, document.body);

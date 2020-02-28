@@ -2,7 +2,11 @@ import { h, render, Component } from "preact";
 import cls from "classnames";
 
 
-export default function Histogram({height, width, data, selected, onSelect}) {
+export default function Histogram(
+  { height, width, data, selected,
+    onSelect, onHover
+  })
+{
   const values = Object.entries(data)
     // FIXME: should we provide sorting function as a prop?
     .sort((a,b) => a[0] > b[0]);
@@ -17,8 +21,9 @@ export default function Histogram({height, width, data, selected, onSelect}) {
   }
 
   const bars = values.map(([label, val], i) =>
-    <g class={cls("bar", {selected: selected[label]})}
-      onClick={() => onSelect(label)}
+    <g class={cls("bar", {selected: selected && selected[label]})}
+      onClick={onSelect && (() => onSelect(label))}
+      onHover={onHover && (() => onHover(label))}
     >
       <rect class="empty"
         x={i * (barWidth + barGap)}
