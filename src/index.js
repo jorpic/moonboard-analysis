@@ -1,6 +1,7 @@
 import { h, render, Component, createRef } from "preact";
 
 import Board from "./Board";
+import Heatmap from "./Heatmap";
 import Histogram from "./Histogram";
 import ProblemList from "./ProblemList";
 
@@ -49,11 +50,15 @@ class App extends Component {
     const {problems, histograms, filters, selected} = this.state;
     if (!problems) return "Loading...";
 
+    const data = filter(problems, filters);
     return (
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
           <Board
             problem={problems.find(p => p.Id === selected)}
+          />
+          <Heatmap
+            problems={data}
           />
           <Histogram
             width={600}
@@ -63,7 +68,7 @@ class App extends Component {
             onSelect={this.onGradeFilter}
           />
           <ProblemList
-            data={filter(problems, filters)}
+            data={data}
             selected={selected}
             onSelect={this.onSelectProblem}/>
         </div>
