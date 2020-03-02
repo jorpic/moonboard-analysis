@@ -11,21 +11,21 @@ export default class Board extends Component {
   componentDidMount() {
     const cnv = this.cnvRef.current;
     this.ctx = cnv.getContext("2d");
-    const img = new Image(0, 0);
+    this.img = new Image(0, 0);
     const board = this;
-    img.onload = function() {
+    this.img.onload = function() {
       cnv.width = this.naturalWidth;
       cnv.height = this.naturalHeight;
-      board.ctx.drawImage(this, 0, 0);
       board.componentDidUpdate();
     }
-    img.src = board_2017;
+    this.img.src = board_2017;
   }
 
   componentDidUpdate() {
-    const cnv = this.cnvRef.current;
-    const m = this.props.moves;
+    this.ctx.drawImage(this.img, 0, 0);
 
+    if (!this.props.problem) return;
+    const m = this.props.problem.Moves;
     let color = "#0f0";
     let i = 0, j = 0;
     while(j < m.length) {

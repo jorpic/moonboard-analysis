@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
     <style>
+      .histogram .bar {
+        cursor: pointer;
+      }
       .histogram .bar .empty {
         fill: #0000;
       }
@@ -26,6 +29,25 @@
       }
       .histogram .bar.selected:hover .value {
         fill: #eaaaeaaa;
+      }
+
+      .problem-list .header {
+        font-weight: bold;
+      }
+      .problem-list .li {
+        cursor: pointer;
+      }
+      .problem-list .li .name {
+        padding: 0 1em;
+      }
+      .problem-list .li.selected {
+        background-color: #aaaaff;
+      }
+      .problem-list .li.selected:hover {
+        background-color: #aaaaff;
+      }
+      .problem-list .li:hover {
+        background-color: #fefefeaa;
       }
     </style>
   </head>

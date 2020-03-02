@@ -2,6 +2,7 @@ import { h, render, Component, createRef } from "preact";
 
 import Board from "./Board";
 import Histogram from "./Histogram";
+import ProblemList from "./ProblemList";
 
 
 class App extends Component {
@@ -10,6 +11,7 @@ class App extends Component {
     this.setState({
       problems: null,
       histograms: null,
+      selected: null,
       filters: {},
     });
 
@@ -25,6 +27,7 @@ class App extends Component {
 
     // FIXME: configure parcel to accept class properties.
     this.onGradeFilter = this.onGradeFilter.bind(this);
+    this.onSelectProblem = this.onSelectProblem.bind(this);
   }
 
   onFilter(name, label) {
@@ -38,14 +41,20 @@ class App extends Component {
 
   onGradeFilter(label) { this.onFilter("Grade", label) }
 
+  onSelectProblem(problemId) {
+    this.setState({selected: problemId});
+  }
+
   render() {
-    const {problems, histograms, filters} = this.state;
+    const {problems, histograms, filters, selected} = this.state;
     if (!problems) return "Loading...";
 
-    const i = 12;
     return (
       <div class="columns">
         <div class="column is-three-fifths is-offset-one-fifth">
+          <Board
+            problem={problems.find(p => p.Id === selected)}
+          />
           <Histogram
             width={600}
             height={300}
@@ -53,13 +62,14 @@ class App extends Component {
             selected={filters.Grade}
             onSelect={this.onGradeFilter}
           />
-          {problems[i].Name}
-          <Board moves={problems[i].Moves}/>
+          <ProblemList
+            data={filter(problems, filters)}
+            selected={selected}
+            onSelect={this.onSelectProblem}/>
         </div>
       </div>);
   }
 }
-
 
 function mkHistogram(list, key) {
   return list.reduce(
@@ -69,6 +79,14 @@ function mkHistogram(list, key) {
       return ix;
     },
     {});
+}
+
+function filter(problems, filters) {
+  const {Grade} = filters;
+  const hasGrade = Grade && Object.values(Grade).some(g => g);
+  return hasGrade
+    ? problems.filter(p => Grade[p.Grade])
+    : problems;
 }
 
 render(<App />, document.body);
