@@ -24,6 +24,7 @@ export default function Histogram(
     <g class={cls("bar", {selected: selected && selected[label]})}
       onClick={onSelect && (() => onSelect(label))}
       onHover={onHover && (() => onHover(label))}
+      font-size="14"
     >
       <rect class="empty"
         x={i * (barWidth + barGap)}
@@ -35,12 +36,30 @@ export default function Histogram(
         y={height - scale*val}
         width={barWidth}
         height={scale * val} />
+      <text
+        dy="-4"
+        x={i * (barWidth + barGap) + barWidth/2}
+        y={height - scale*val}
+        width={barWidth}
+        text-anchor="middle"
+      >
+        {val}
+      </text>
+      <text
+        dy="16"
+        x={i * (barWidth + barGap) + barWidth/2}
+        y={height}
+        width={barWidth}
+        text-anchor="middle"
+      >
+        {label}
+      </text>
     </g>
   );
-  return (<svg {...{
+  const svgProps = {
     class: "histogram",
-    width, height}}
-  >
-    {bars}
-  </svg>);
+    viewBox: `0 -25 ${width} ${height+25+16}`,
+    width, height
+  };
+  return (<svg {...svgProps}>{bars}</svg>);
 }

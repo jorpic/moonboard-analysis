@@ -61,8 +61,8 @@ class App extends Component {
             problems={data}
           />
           <Histogram
-            width={600}
-            height={300}
+            width={650}
+            height={400}
             data={histograms.Grade}
             selected={filters.Grade}
             onSelect={this.onGradeFilter}
@@ -70,7 +70,8 @@ class App extends Component {
           <ProblemList
             data={data}
             selected={selected}
-            onSelect={this.onSelectProblem}/>
+            onSelect={this.onSelectProblem}
+          />
         </div>
       </div>);
   }
